@@ -1,12 +1,17 @@
 import json
 from json import JSONDecodeError
+
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 
 def get_json_posts():
     """Функция возвращает JSON файл"""
-    with open("posts.json", "r", encoding='utf8') as file:
-        dict_posts = json.load(file)
+    try:
+        with open("posts.json", "r", encoding='utf8') as file:
+            dict_posts = json.load(file)
+    except FileNotFoundError:
+        return "Файл не найден"
+    else:
         if list(dict_posts):
             return dict_posts
         else:
@@ -36,6 +41,7 @@ def search_tag(word):
 
 
 def is_filename_allowed(filename=None):
+    """Проверяет доаустимый формат"""
     extension = filename.split(".")[-1].lower()
     if extension in ALLOWED_EXTENSIONS:
         return True
@@ -43,6 +49,7 @@ def is_filename_allowed(filename=None):
 
 
 def add_post_json(picture, post):
+    """Дабавляет данные поста в JSON"""
     dict_ = dict()
     dict_["pic"] = f"./uploads/images/{picture}"
     dict_["content"] = post
@@ -54,6 +61,3 @@ def add_post_json(picture, post):
         with open("posts.json", "w", encoding='utf8') as file:
             json.dump(dict_json, file, indent=2, ensure_ascii=False)
         return dict_json
-
-
-#print(add_post_json("ключ", "dsvsdvsd"))
