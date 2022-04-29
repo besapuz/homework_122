@@ -1,4 +1,4 @@
-import logging
+#import logging
 
 from flask import Flask, request, render_template, send_from_directory
 
@@ -6,7 +6,8 @@ from blueprint.loader import loader
 from blueprint.main import main
 from functions import search_tag, is_filename_allowed, add_post_json
 
-# logging.basicConfig(filename="info.log", level=logging.INFO, format='%(asctime)s %(levelname)s:%(massages)s', encoding="utf-8")
+#logging.basicConfig(filename="info.log", level=logging.INFO, format='%(asctime)s %(levelname)s:%(massages)s', encoding="utf-8")
+
 POST_PATH = "posts.json"
 UPLOAD_FOLDER = "uploads/images"
 
@@ -24,7 +25,6 @@ def index():
 @app.route("/list")
 def page_tag():
     get_content = request.args.get("s")
-    logging.info(f'Выполнен поиск по запросу {get_content}')
     content = search_tag(get_content)
     return render_template("post_list.html", content=content, get_content=get_content.capitalize())
 
