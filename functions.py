@@ -1,6 +1,5 @@
 import json
 from json import JSONDecodeError
-
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 
@@ -8,24 +7,30 @@ def get_json_posts():
     """Функция возвращает JSON файл"""
     with open("posts.json", "r", encoding='utf8') as file:
         dict_posts = json.load(file)
-    return dict_posts
-    #except JSONDecodeError:
-        #return "Не удалось открыть файл
+        if list(dict_posts):
+            return dict_posts
+        else:
+            "Не удается преобразовать в словарь"
+
 
 dict_json = get_json_posts()
 
 
 def search_tag(word):
-    word = str(word).lower()
+    """Функция ищет все слова длиннее 2 символов в каждом content"""
+    word = [i.lower() for i in word.split(" ")]
     if word:
         list_content = []
-        s = ''.join(word.split())
-        for i in dict_json:
-            if s in i["content"].lower():
-                list_content.append(i)
+        for c in word:
+            for n in dict_json:
+                if len(c) >= 3:
+                    if c in n["content"].lower():
+                        list_content.append(n)
+                    else:
+                        continue
+                else:
+                    break
         return list_content
-    elif word is None:
-        return None
     else:
         return False
 
@@ -38,18 +43,17 @@ def is_filename_allowed(filename=None):
 
 
 def add_post_json(picture, post):
-
-    with open("posts.json", "r", encoding='utf8') as file:
-        dict_json = json.load(file)
-    dict_ = {}
-    list_ = []
+    dict_ = dict()
     dict_["pic"] = f"./uploads/images/{picture}"
     dict_["content"] = post
-    list_.append(dict_)
-    with open("posts.json", "a", encoding='utf8') as file:
-        json.dump(dict_, file, indent=2, ensure_ascii=False)
-    return dict_json
-
+    try:
+        dict_json.append(dict_)
+    except JSONDecodeError:
+        return "Не удалось открыть файл"
+    else:
+        with open("posts.json", "w", encoding='utf8') as file:
+            json.dump(dict_json, file, indent=2, ensure_ascii=False)
+        return dict_json
 
 
 #print(add_post_json("ключ", "dsvsdvsd"))

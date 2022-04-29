@@ -31,16 +31,21 @@ def page_tag():
 
 @app.route("/post", methods=["GET", "POST"])
 def page_post_form():
-    picture = request.files.get("picture")
-    filename = picture.filename
-    text_post = request.form.get('content')
-    if is_filename_allowed(filename):
-        path = f"../uploads/images/{filename}"
-        picture.save(f"./uploads/images/{filename}")
-        add_post_json(filename, text_post)
-        return render_template("post_uploaded.html", picture=path, post=text_post)
+    try:
+        picture = request.files.get("picture")
+        filename = picture.filename
+        text_post = request.form.get('content')
+
+    except ValueError:
+        "ошибка загрузки"
     else:
-        return f"Тип файла не поддерживается"
+        if is_filename_allowed(filename):
+            path = f"../uploads/images/{filename}"
+            picture.save(f"./uploads/images/{filename}")
+            add_post_json(filename, text_post)
+            return render_template("post_uploaded.html", picture=path, post=text_post)
+        else:
+            return f"Тип файла не поддерживается"
 
 
 @app.route("/uploads/<path:path>")
