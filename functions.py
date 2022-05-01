@@ -9,7 +9,7 @@ def get_json_posts():
     try:
         with open("posts.json", "r", encoding='utf8') as file:
             dict_posts = json.load(file)
-    except FileNotFoundError:
+    except (FileNotFoundError, JSONDecodeError):
         return "Файл не найден"
     else:
         if list(dict_posts):
@@ -55,7 +55,7 @@ def add_post_json(picture, post):
     dict_["content"] = post
     try:
         dict_json.append(dict_)
-    except JSONDecodeError:
+    except (FileNotFoundError, JSONDecodeError):
         return "Не удалось открыть файл"
     else:
         with open("posts.json", "w", encoding='utf8') as file:
