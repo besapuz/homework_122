@@ -29,6 +29,7 @@ def search_tag(word):
         for c in word:
             for n in dict_json:
                 if len(c) >= 3:
+                    print(c)
                     if c in n["content"].lower():
                         list_content.append(n)
                     else:

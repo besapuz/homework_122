@@ -22,8 +22,8 @@ def get_post():
         logging.info("Данные не загружены")
         return "Ошибка загрузки"
     if is_filename_allowed(filename):
-        path = f"../uploads/images/{filename}"
         picture.save(f"./uploads/images/{filename}")
+        path = f"../uploads/images/{filename}"
         add_post_json(filename, text_post)
         return render_template("post_uploaded.html", picture=path, post=text_post)
     else:
